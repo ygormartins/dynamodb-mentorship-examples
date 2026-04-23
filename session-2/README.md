@@ -102,7 +102,7 @@ Tabela: product_attrs   PK: attribute_id (UUID)
 
 &nbsp;
 
-### Criando as tabelas com o AWS CLI
+### Criando as tabelas com o AWS CLI — [`index.ts` Passo 2](./index.ts#L21-L42)
 
 ```bash
 # Tabela: stores
@@ -146,7 +146,7 @@ O `@aws-sdk/lib-dynamodb` (DocumentClient) **faz o marshal automaticamente** de 
 
 &nbsp;
 
-### O que conseguimos ✅ e o que não conseguimos ❌
+### O que conseguimos ✅ e o que não conseguimos ❌ — [`GetCommand` exemplo](./index.ts#L27-L41)
 
 ✅ `GetItem` por UUID exato — O(1), muito rápido  
 ❌ "Me dê todos os produtos da loja X" — **sem conceito de chave estrangeira**, não há como consultar por `store_id` sem um `Scan`
@@ -167,7 +167,7 @@ O time de produto quer usar o **GTIN** (código de barras) como identificador do
 
 &nbsp;
 
-### Chave string composta: `"{storeId}#{productId}"`
+### Chave string composta: `"{storeId}#{productId}"` — [`index.ts` Passo 3](./index.ts#L44-L78)
 
 O idioma do DynamoDB é **embutir hierarquia na string da chave** usando um delimitador:
 
@@ -195,7 +195,7 @@ Uma opção é o `Scan` — mas vamos falar sobre por que isso é o último recu
 
 &nbsp;
 
-## Passo 4 — Tabela com Chave Composta: PK (storeId) + SK (productId)
+## Passo 4 — Tabela com Chave Composta: PK (storeId) + SK (productId) — [`index.ts` Passo 4](./index.ts#L80-L135)
 
 A solução: separar `storeId` e `productId` na **chave de partição (PK)** e na **chave de ordenação (SK)** respectivamente.
 
@@ -230,7 +230,7 @@ aws dynamodb create-table \
 
 &nbsp;
 
-### Consultando produtos de uma loja (com paginação)
+### Consultando produtos de uma loja (com paginação) — [`QueryCommand` exemplo](./index.ts#L113-L128)
 
 &nbsp;
 
@@ -260,4 +260,8 @@ Os itens dentro de uma partição são **sempre ordenados lexicograficamente pel
 
 &nbsp;
 
-> **Próximo passo:** executar queries ao vivo em [`index.ts`](./index.ts) contra uma instância local do DynamoDB (DynamoDB Local ou LocalStack).
+> **Próximo passo:** executar queries ao vivo contra uma instância local do DynamoDB (DynamoDB Local ou LocalStack):
+> - [Configuração do cliente DynamoDB](./index.ts#L1-L19)
+> - [`GetCommand` — busca por UUID (Passo 2)](./index.ts#L27-L41)
+> - [Chave composta `storeId#barcode` (Passo 3)](./index.ts#L62-L78)
+> - [`ScanCommand` vs `QueryCommand` (Passo 4)](./index.ts#L83-L133)
