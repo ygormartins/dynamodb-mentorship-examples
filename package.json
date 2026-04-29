@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "session-2": "tsx --env-file=.env session-2/index.ts",
+    "session-3": "tsx --env-file=.env session-3/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
